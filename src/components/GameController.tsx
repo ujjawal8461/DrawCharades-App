@@ -25,6 +25,14 @@ export const GameController = () => {
       setGameStatus({ gamePhase: "ROUND_END" });
     });
 
+    socket.on("round_time_up", ({ movie }) => {
+      setGameStatus({ gamePhase: "ROUND_END" });
+    });
+
+    socket.on("scores_updated", (scores) => {
+      useGameStore.getState().updateScores(scores);
+    });
+
     socket.on("timer_update", (t) => {
       setGameStatus({ timer: t });
     });
@@ -37,6 +45,8 @@ export const GameController = () => {
       socket.off("game_started");
       socket.off("round_started");
       socket.off("correct_guess");
+      socket.off("round_time_up");
+      socket.off("scores_updated");
       socket.off("timer_update");
       socket.off("votes_updated");
     };

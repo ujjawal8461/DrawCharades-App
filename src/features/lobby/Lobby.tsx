@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { socket } from "@/socket/socket";
 import { useGameStore } from "@/store/useGameStore";
+import { User, Hash, Play, SwitchCamera, Shield, Award, Clock } from "lucide-react";
 
 export const Lobby = () => {
   const { roomCode, players, me, isHost } = useGameStore();
@@ -43,34 +44,35 @@ export const Lobby = () => {
 
   if (!roomCode) {
     return (
-      <div className="flex flex-col gap-6 p-8 bg-white rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-        <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Get Started</h2>
-            <p className="text-gray-500 text-sm">Join a room or create your own</p>
-        </div>
-        
-        <div className="flex flex-col gap-4">
-           <input
-            type="text"
-            placeholder="Enter your name"
-            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-600 outline-none transition-all font-semibold"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-          />
+      <div className="flex flex-col gap-6 w-full animate-in fade-in zoom-in-95 duration-500">
+        <div className="space-y-4">
+           <div className="relative">
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Your Rockstar Name"
+                className="w-full pl-12 pr-4 py-4 bg-slate-900/50 border border-white/10 rounded-2xl focus:border-indigo-500 outline-none transition-all font-bold text-white placeholder:text-slate-600"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+              />
+           </div>
            
-           <div className="p-4 bg-indigo-50 rounded-xl border border-indigo-100 space-y-3">
-              <label className="text-xs font-bold text-indigo-600 uppercase tracking-wider">Round Timer</label>
+           <div className="p-6 bg-indigo-600/10 rounded-3xl border border-indigo-500/20 space-y-4 shadow-xl shadow-indigo-500/5">
+              <div className="flex items-center gap-2 mb-2">
+                 <Clock className="w-4 h-4 text-indigo-400" />
+                 <label className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Round Timer</label>
+              </div>
               <div className="flex gap-2">
                  {[
-                   { label: '1m', val: 60 },
+                   { label: '60s', val: 60 },
+                   { label: '90s', val: 90 },
                    { label: '2m', val: 120 },
-                   { label: '5m', val: 300 },
-                   { label: '10m', val: 600 }
+                   { label: '3m', val: 180 }
                  ].map(opt => (
                    <button 
                      key={opt.val}
                      onClick={() => setTimerDuration(opt.val)}
-                     className={`flex-1 p-2 rounded-lg font-bold text-sm transition-all ${timerDuration === opt.val ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600 border border-indigo-100 hover:bg-indigo-100'}`}
+                     className={`flex-1 py-2.5 rounded-xl font-bold text-xs transition-all border ${timerDuration === opt.val ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-900/50 border-white/5 text-slate-400 hover:bg-slate-800'}`}
                    >
                      {opt.label}
                    </button>
@@ -78,30 +80,33 @@ export const Lobby = () => {
               </div>
               <button
                 onClick={handleCreate}
-                className="w-full p-4 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-md active:scale-95"
+                className="btn-party w-full py-4 text-white font-black rounded-2xl flex items-center justify-center gap-2 text-lg group"
               >
-                Create Room
+                CREATE ROOM <Play className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
            </div>
 
-           <div className="relative flex items-center justify-center my-2">
-              <div className="absolute h-[1px] w-full bg-gray-100"></div>
-              <span className="relative px-3 bg-white text-gray-400 text-xs font-bold">OR JOIN</span>
+           <div className="relative flex items-center justify-center py-2">
+              <div className="absolute h-[1px] w-full bg-white/5"></div>
+              <span className="relative px-4 bg-[#141d33] text-slate-500 text-[10px] font-black tracking-widest uppercase">Or Join Party</span>
            </div>
 
-           <div className="flex flex-col gap-3">
-              <input
-                type="text"
-                placeholder="Enter 6-digit code"
-                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:border-indigo-600 outline-none transition-all text-center font-mono font-bold tracking-widest uppercase"
-                value={inputCode}
-                onChange={(e) => setInputCode(e.target.value)}
-              />
+           <div className="space-y-3">
+              <div className="relative">
+                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <input
+                  type="text"
+                  placeholder="6-DIGIT CODE"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-900/50 border border-white/10 rounded-2xl focus:border-indigo-500 outline-none transition-all text-center font-mono font-black tracking-[0.3em] uppercase text-white placeholder:text-slate-600"
+                  value={inputCode}
+                  onChange={(e) => setInputCode(e.target.value)}
+                />
+              </div>
               <button
                 onClick={handleJoin}
-                className="w-full p-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all shadow-md active:scale-95"
+                className="w-full py-4 bg-slate-800 hover:bg-slate-700 text-white font-black rounded-2xl transition-all border border-white/5 flex items-center justify-center gap-2 group"
               >
-                Join Game
+                JOIN GAME <Play className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
            </div>
         </div>
@@ -110,33 +115,46 @@ export const Lobby = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-4xl">
-      <div className="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center border border-gray-100">
+    <div className="flex flex-col gap-6 w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="glass-panel p-6 rounded-3xl flex justify-between items-center border-indigo-500/30">
         <div>
-          <p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-1">Room Code</p>
-          <h2 className="text-4xl font-bold text-indigo-600 tracking-tight">{roomCode}</h2>
+          <div className="flex items-center gap-1.5 mb-1">
+             <Hash className="w-3 h-3 text-indigo-400" />
+             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Room Code</span>
+          </div>
+          <h2 className="text-4xl font-black text-white tracking-tighter leading-none">{roomCode}</h2>
         </div>
         <div className="text-right">
-          <p className="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-1">Players</p>
-          <p className="text-3xl font-bold text-gray-900">{players.length}/10</p>
+          <div className="flex items-center justify-end gap-1.5 mb-1">
+             <User className="w-3 h-3 text-emerald-400" />
+             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Players</span>
+          </div>
+          <p className="text-3xl font-black text-white leading-none">{players.length}<span className="text-slate-600 text-sm font-bold ml-1">/10</span></p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Team A */}
-        <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 flex flex-col gap-4 min-h-[350px]">
-          <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-            <h3 className="text-xl font-bold text-gray-800">Team A</h3>
+        <div className="glass-panel p-6 rounded-[2rem] border-indigo-500/20 flex flex-col gap-4 min-h-[300px] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+             <Shield className="w-24 h-24 text-indigo-500" />
+          </div>
+          <div className="flex justify-between items-center border-b border-white/5 pb-4">
+            <h3 className="text-xl font-black text-indigo-400 flex items-center gap-2">
+               <Shield className="w-5 h-5" /> TEAM A
+            </h3>
             {me?.team === "B" && (
-              <button onClick={switchTeam} className="text-xs font-bold text-indigo-600 hover:underline">Switch Team</button>
+              <button onClick={switchTeam} className="text-[10px] font-black text-slate-400 hover:text-white uppercase tracking-widest flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
+                <SwitchCamera className="w-3 h-3" /> Switch
+              </button>
             )}
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 relative z-10">
             {players.filter(p => p.team === "A").map(p => (
-              <div key={p.id} className={`p-3 bg-white rounded-xl shadow-sm border ${p.id === socket.id ? 'border-indigo-600' : 'border-gray-100'}`}>
+              <div key={p.id} className={`p-3 rounded-2xl border transition-all ${p.id === socket.id ? 'bg-indigo-600/20 border-indigo-500/50' : 'bg-slate-800/40 border-white/5'}`}>
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold">{p.name} {p.id === socket.id ? '(You)' : ''}</span>
-                  {p.id === useGameStore.getState().me?.id && isHost && <span className="text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded font-bold">HOST</span>}
+                  <span className="font-bold text-sm text-slate-200">{p.name} {p.id === socket.id ? '(You)' : ''}</span>
+                  {p.id === me?.id && isHost && <span className="text-[8px] bg-indigo-500 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">Host</span>}
                 </div>
               </div>
             ))}
@@ -144,34 +162,45 @@ export const Lobby = () => {
         </div>
 
         {/* Team B */}
-        <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 flex flex-col gap-4 min-h-[350px]">
-          <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-            <h3 className="text-xl font-bold text-gray-800">Team B</h3>
+        <div className="glass-panel p-6 rounded-[2rem] border-rose-500/20 flex flex-col gap-4 min-h-[300px] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+             <Award className="w-24 h-24 text-rose-500" />
+          </div>
+          <div className="flex justify-between items-center border-b border-white/5 pb-4">
+            <h3 className="text-xl font-black text-rose-400 flex items-center gap-2">
+               <Award className="w-5 h-5" /> TEAM B
+            </h3>
             {me?.team === "A" && (
-              <button onClick={switchTeam} className="text-xs font-bold text-indigo-600 hover:underline">Switch Team</button>
+              <button onClick={switchTeam} className="text-[10px] font-black text-slate-400 hover:text-white uppercase tracking-widest flex items-center gap-1 bg-white/5 px-2 py-1 rounded-lg">
+                <SwitchCamera className="w-3 h-3" /> Switch
+              </button>
             )}
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 relative z-10">
             {players.filter(p => p.team === "B").map(p => (
-              <div key={p.id} className={`p-3 bg-white rounded-xl shadow-sm border ${p.id === socket.id ? 'border-indigo-600' : 'border-gray-100'}`}>
-                <span className="font-semibold">{p.name} {p.id === socket.id ? '(You)' : ''}</span>
+              <div key={p.id} className={`p-3 rounded-2xl border transition-all ${p.id === socket.id ? 'bg-rose-600/20 border-rose-500/50' : 'bg-slate-800/40 border-white/5'}`}>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-sm text-slate-200">{p.name} {p.id === socket.id ? '(You)' : ''}</span>
+                  {p.id === me?.id && isHost && <span className="text-[8px] bg-rose-500 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">Host</span>}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="mt-4">
         {isHost ? (
           <button 
             onClick={() => socket.emit("start_game", roomCode)}
-            className="p-5 bg-indigo-600 text-white text-2xl font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg active:scale-95"
+            className="btn-party w-full py-5 text-2xl font-black rounded-[2rem] shadow-2xl shadow-indigo-500/20 group"
           >
-            START GAME
+            START THE SHOW <Play className="inline-block ml-2 w-8 h-8 group-hover:translate-x-1 transition-transform" />
           </button>
         ) : (
-          <div className="p-5 bg-gray-100 rounded-2xl text-center text-gray-500 font-bold italic border border-gray-200">
-            Waiting for host to start...
+          <div className="p-6 bg-slate-900/50 rounded-[2rem] border border-white/5 text-center flex flex-col items-center gap-2">
+             <div className="w-10 h-10 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+             <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-xs">Waiting for host to start...</p>
           </div>
         )}
       </div>
