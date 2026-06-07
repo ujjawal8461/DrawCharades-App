@@ -147,28 +147,39 @@ export const Canvas: React.FC<CanvasProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full bg-white rounded-2xl md:rounded-[2rem] shadow-2xl overflow-hidden border-8 border-slate-800 ring-1 ring-white/10 group">
-      {/* Background pattern for paper feel */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]"></div>
-      
-      <canvas
-        ref={canvasRef}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseOut={stopDrawing}
-        onTouchStart={startDrawing}
-        onTouchMove={draw}
-        onTouchEnd={stopDrawing}
-        className="w-full h-full touch-none cursor-crosshair relative z-10"
-        style={{ touchAction: "none" }}
-      />
+    <div className="relative w-full h-full bg-white rounded-3xl shadow-[8px_8px_0px_0px_#1e293b] border-4 border-slate-800 flex flex-col overflow-hidden group">
+      {/* Spiral binding rings at the top */}
+      <div className="h-10 bg-amber-50/80 border-b-4 border-slate-800 flex justify-around px-8 items-center z-20 relative shrink-0">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <div key={i} className="relative w-3 h-8 flex flex-col items-center">
+            {/* The metal ring looping over */}
+            <div className="absolute top-[-8px] w-2.5 h-10 bg-gradient-to-r from-slate-400 via-slate-200 to-slate-500 rounded-full border-2 border-slate-800 shadow-sm z-30"></div>
+            {/* Ring hole in paper */}
+            <div className="absolute top-[8px] w-2.5 h-2.5 bg-slate-800 rounded-full z-20"></div>
+          </div>
+        ))}
+      </div>
 
-      {/* Subtle corner decorations */}
-      <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-slate-200 rounded-tl-lg pointer-events-none"></div>
-      <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-slate-200 rounded-tr-lg pointer-events-none"></div>
-      <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-slate-200 rounded-bl-lg pointer-events-none"></div>
-      <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-slate-200 rounded-br-lg pointer-events-none"></div>
+      <div className="flex-1 relative bg-white">
+        {/* Background pattern for paper feel */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        
+        <canvas
+          ref={canvasRef}
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseOut={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={stopDrawing}
+          className="w-full h-full touch-none cursor-crosshair relative z-10"
+          style={{ touchAction: "none" }}
+        />
+        
+        {/* Simple red margin sketch line on left side */}
+        <div className="absolute left-10 top-0 bottom-0 w-[2px] bg-red-200 pointer-events-none z-10"></div>
+      </div>
     </div>
   );
 };
